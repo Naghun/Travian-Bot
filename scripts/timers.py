@@ -13,43 +13,70 @@ class TimeManager:
                 'database' : 'travian',
             }
         self.time = time
-        
-    def delete_timers(self):
+
+    #####################################################################
+    #########################    DELETING OLD &   #######################
+    ####################    ADDING NEW TIMERS IN DB   ###################
+    #####################################################################
+     
+    def make_start_timers(self):
+
+        print("Removing old Times from Timers db!")
+        print("-"*30)
         try:
             conn = mysql.connector.connect(**self.db_config)
             cursor = conn.cursor()
 
             query = "DELETE FROM timers;"
-            cursor.execute(query)
             reset_query = f"ALTER TABLE timers AUTO_INCREMENT = 1;"
+            cursor.execute(query)
             cursor.execute(reset_query)
             conn.commit()
-            print("All rows deleted from 'timers' table.")
 
         except Exception as e:
             print(f"Error deleting rows from 'timers' table: {e}")
-
+        
         finally:
             if cursor:
                 cursor.close()
             if conn:
                 conn.close()
+
+        print("Removing old Tasks from Tasks db!")
+        print("-"*30)
+        try:
+            conn = mysql.connector.connect(**self.db_config)
+            cursor = conn.cursor()
+
+            query = "DELETE FROM tasks;"
+            reset_query = f"ALTER TABLE timers AUTO_INCREMENT = 1;"
+            cursor.execute(query)
+            cursor.execute(reset_query)
+            conn.commit()
+
+        except Exception as e:
+            print(f"Error deleting rows from 'tasks' table: {e}")
         
-    def make_start_timers(self):
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+
+                
+        print("Setting new Timers in db!")
+        print("-"*30)
+
         try:
 
             conn = mysql.connector.connect(**self.db_config)
             cursor = conn.cursor()
 
-            query = "DELETE FROM timers;"
-            cursor.execute(query)
-            conn.commit()
-
             current_time = datetime.now()
             timers_list = []
 
-            for _ in range(24):
-                interval = timedelta(seconds=random.randint(55, 65))
+            for _ in range(96):
+                interval = timedelta(minutes=random.randint(10, 20))
                 new_time = current_time + interval
                 timers_list.append(new_time)
                 current_time = new_time
@@ -57,7 +84,6 @@ class TimeManager:
             for index, time in enumerate(timers_list):
                 insert_query = f"INSERT INTO timers (time) VALUES ('{time.strftime('%Y-%m-%d %H:%M:%S')}')"
                 cursor.execute(insert_query)
-                print(f"Timer {index+1}: {time.strftime("%H:%M:%S - %d, %m, %Y")}")
                 conn.commit()
             print("Timers inserted successfully!")
 
@@ -71,8 +97,11 @@ class TimeManager:
             if conn:
                 conn.close()
 
+    #####################################################################
+    #########################    FIRST REFRESH   ########################
+    #####################################################################
 
-    def get_refresh_timer(self):
+    def set_first_refresh(self):
         try:
             conn = mysql.connector.connect(**self.db_config)
             cursor = conn.cursor()
@@ -80,32 +109,51 @@ class TimeManager:
             query = "SELECT id, time FROM timers;"
             cursor.execute(query)
             
-
-            # Dobijanje rezultata iz upita
             timers_list = cursor.fetchall()
-            print("List taken from database!")
-
 
             if timers_list:
-                first_timer_id = timers_list[0][0]
-                print("first timer id is: ", first_timer_id)
-                query_delete = f"DELETE FROM timers WHERE id = {first_timer_id};"
-                cursor.execute(query_delete)
-                print("First timer deleted!")
+                refresh_time = timers_list[0][1]
+                refresh_time.strftime('%Y-%m-%d %H:%M:%S')
+                refresh_id = timers_list[0][0]
+
+                with open("scripts/refresh.py", 'w') as file:
+                    file.write("import datetime\n")
+                    file.write(f"refresh_time = {repr(refresh_time)}\n")
+                    file.write(f"refresh_id = {repr(refresh_id)}")
+
+        except Exception as e:
+            print(f"Error setting first refresh, {e}")
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+
+    #####################################################################
+    ###############      DELETE FIRST, ADD LAST      ####################
+    #####################################################################
+
+    def delete_first_timer_add_last_timer(self):
+        try:
+            conn = mysql.connector.connect(**self.db_config)
+            cursor = conn.cursor()
+
+            query = "SELECT id, time FROM timers;"
+            cursor.execute(query)
+            timers_list = cursor.fetchall()
+
+            first_timer_id = timers_list[0][0]
+            query_delete = f"DELETE FROM timers WHERE id = {first_timer_id};"
+            cursor.execute(query_delete)
 
             if timers_list:
-                last_timer = timers_list[23][1]
-                print(f"Last timer id is: {last_timer}")
-                interval = timedelta(seconds=random.randint(55,65))
-                new_time = last_timer + interval
-                print(f"New time is: {new_time}" )
+                last_timer_id = timers_list[-1][0]
+                last_timer_time = timers_list[-1][1]
+                print(f"Last timer id is: {last_timer_id}, time is: {last_timer_time}")
+                interval = timedelta(minutes=random.randint(10,20))
+                new_time = last_timer_time + interval
                 query_add = f"INSERT INTO timers (time) VALUES ('{new_time}')"
                 cursor.execute(query_add)
-                print("New timer added successfully!")
-
-            conn.commit()
-
-
 
         except Exception as e:
             print(f"Error working with timers list from database: {e}")
@@ -117,24 +165,37 @@ class TimeManager:
                 conn.close()
 
 
-    def execute_tasks(self, task, variable):
-        bot = TravianBot()
-        bot.execute_tasks(task, variable)
+    #####################################################################
+    #################      OTHER REFRESH TIMERS      ####################
+    #####################################################################
 
-    def make_task(self, task, variable):
-        if task == '':
-            pass
+    def get_refresh_timer(self):
+        try:
+            conn = mysql.connector.connect(**self.db_config)
+            cursor = conn.cursor()
+
+            query = "SELECT id, time FROM timers;"
+            cursor.execute(query)
+            
+            timers_list = cursor.fetchall()
+
+            if timers_list:
+                refresh_id = timers_list[1][0]
+                refresh_time = timers_list[1][1]
+                refresh_time.strftime('%Y-%m-%d %H:%M:%S')
+
+                with open("scripts/refresh.py", 'w') as file:
+                    file.write("import datetime\n")
+                    file.write(f"refresh_time = {repr(refresh_time)}\n")
+                    file.write(f"refresh_id = {repr(refresh_id)}")
 
 
 
+        except Exception as e:
+            print(f"Error working with timers list from database: {e}")
 
-
-
-"""
-kreirati vrijeme
-u tom vremenu izvrsiti tasks
-izbrisati vrijeme
-
-sve ostale prebaciti ispod
-
-"""
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
