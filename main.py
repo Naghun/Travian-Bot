@@ -83,7 +83,7 @@ def main():
             time.sleep(6)
 
     except KeyboardInterrupt:
-        print("Petlja je prekinuta tastaturom.")
+        print("Program je prekinut.")
 
 
 main()

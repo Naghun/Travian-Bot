@@ -63,10 +63,12 @@ class TaskCreator:
         villages = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]    # -1 for indexes
         tribes = ['egyptian', 'roman', 'spartan', 'hun', 'gaul', 'teuton']
         #           0           1           2       3       4       5
-        #                   0       1           2       3               4           5           6       7           8           9           10          11      12
-        building_slots = ['main', 'trade', 'market', 'residence', 'rallypoint', 'warehouse', 'silos', 'stable', 'barracks', 'hospital', 'town hall', 'hero', 'bakery', 
-                          'mill', 'res1', 'res2', 'res3', 'workshop', 'arena', 'academy', 'smithy', 'wall', 'waterwork', 'treasury', 'great',]
-        #                   13      14      15      16          17      18          19      20          21      22          23          24
+        #                   0       1          2       3            4           5           6           7        8           9         10          11          12       13
+        #building_slots = ['none', 'main', 'trade', 'market', 'residence', 'rallypoint', 'warehouse', 'silos', 'stable', 'barracks', 'hospital', 'town hall', 'hero', 'bakery', 
+        #                  'mill', 'res1', 'res2', 'res3', 'workshop', 'arena', 'academy', 'smithy', 'wall', 'waterwork', 'treasury', 'great',]
+        #                   14      15      16      17          18      19         20        21        22      23          24          25
+
+        building_slots = [0,26,30,32,35,39,31,29,34,37,38,36,33,25,23,22,21,20,19,24,28,27,40,41,42,43]
         resource_field_slots = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]       # -1 for indexes
 
         if resource_field_slot_index:
@@ -111,7 +113,7 @@ class TaskCreator:
 
 if __name__ == '__main__':
     task = TaskCreator()
-    task.create_task(id=1, task_name_index=0, village_index=6, tribe_index=3, building_slot_index=None, resource_field_slot_index=1)
+    task.create_task(id=1, task_name_index=1, village_index=5, tribe_index=1, building_slot_index=31, resource_field_slot_index=None)
     #task.show_timers(5)
 
 
@@ -119,7 +121,7 @@ if __name__ == '__main__':
     names =  ['upgrade_resource_field', 'upgrade_building', 'construct_building', 'send_farm_lists', 'do_npc', 'raid_oasis', 'train_troops']
     #               0                           1                   2                   3           4           5           6
 
-    villages = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]    # -1 for indexes
+    villages = [,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]    # -1 for indexes
 
     tribes = ['egyptian', 'roman', 'spartan', 'hun', 'gaul', 'teuton']
     #           0           1           2       3       4       5
@@ -131,6 +133,6 @@ if __name__ == '__main__':
 
     resource_field_slots = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]       # -1 for indexes
 
-    mine_villages = [1-egypt, 2-egypt, 3-spartan, 4-teuton, 5-gaul, 6-roman, 7-hun]
+    mine_villages = ['None, 1- Ghun Town, 2- Ghun Egypt, 3-Ghun Spartan, 4-Ghun Teuton, 5- Ghun Gaul, 6- Ghun Roman, 7-Ghun Hun]
 
 """

@@ -100,28 +100,10 @@ class TravianBot:
         
     ########    RESOURCE FIELD UPGRADE      #######
             
-    def upgrade_resource_field(self, village, res_field_slot):
+    def upgrade_resource_field(self, res_field_slot):
 
         try:
-            conn = mysql.connector.connect(**self.db_config)
-            cursor = conn.cursor()
-
-            query = f"SELECT * FROM villages WHERE id = %s;"
-            cursor.execute(query, (village,))
-            village_data = cursor.fetchall()
-            resource_type = village_data[0][3]
-
-        except Exception as e:
-            print(f"Error getting villages data from 'villages' database, {e}")
-
-        finally:
-            if cursor:
-                cursor.close()
-            if conn:
-                conn.close()
-
-        try:
-            self.driver.click(ResourceFieldSlots(resource_field_type = resource_type, resource_field_slot=res_field_slot).resource_field)
+            self.driver.click(ResourceFieldSlots(resource_field_slot=res_field_slot).resource_field)
         except Exception as e:
             print("Error getting resoruce field slot to upgrade!!!", e)
         self.driver.sleep(1)
@@ -134,10 +116,22 @@ class TravianBot:
     ########    BUILDING UPGRADE      #######
 
     def upgrade_building(self, slot_number, tribe):
+
         try:
-            self.driver.click(VillageSlots.building_slot(building_slot = slot_number, tribe = tribe))
-        except:
-            print("Error finding specified building slot!")
+            self.driver.click(Base.village_Page)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error changing to village view!", e)
+        try:
+            self.driver.click(VillageSlots(slot_number = slot_number, tribe = tribe).building_slot)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error finding specified building slot!", e)
+        try:
+            self.driver.sleep(1)
+            self.driver.click(VillageSlots(slot_number = slot_number, tribe = tribe).building_button)
+        except Exception as e:
+            print("Error confirming building!", e)
 
 
     ########    BUILDING CONSTRUCTION      #######
@@ -201,6 +195,7 @@ class TravianBot:
         ### EXECUTING TASKS ###
         print("Starting tasks...")
         print("-"*30)
+        self.driver.sleep(2)
         tasks = self.timer
         for task in tasks:
             task_name = task[1]
@@ -214,11 +209,18 @@ class TravianBot:
                 print("Error with changin village", e)
 
             if task_name == 'upgrade_resource_field':
-                free = self.check_construction()
-                if free:
-                    self.upgrade_resource_field(village=task_village, res_field_slot=task_resource)
-                else:
-                    print("Building already in construction!")
+                try:
+                    self.upgrade_resource_field(res_field_slot=task_resource)
+                except:
+                    print("Building resource field was not possible!")
+
+            if task_name == 'upgrade_building':
+                try:
+                    self.upgrade_building(slot_number = task_building, tribe=task_tribe)
+                except:
+                    print("Building resource field was not possible!")
+            self.driver.sleep(1)
+
         print("#"*50)
         print("All tasks finished!!!")
         print("#"*50)

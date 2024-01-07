@@ -158,6 +158,7 @@ class TimeManager:
                 query_add = f"INSERT INTO timers (time) VALUES ('{new_time}')"
                 cursor.execute(query_add)
 
+            conn.commit()
         except Exception as e:
             print(f"Error working with timers list from database: {e}")
 

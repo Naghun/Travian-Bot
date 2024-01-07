@@ -35,10 +35,12 @@ class Base:
 class VillageSlots:
     def __init__(self, slot_number, tribe = None):
         self.empty_building = f"#villageContent > div.buildingSlot.a{slot_number}.g0.aid{slot_number}.{tribe} > svg > path"
-        self.building_slot= f"#villageContent > div.buildingSlot.a{slot_number}.g15.aid{slot_number}.{tribe}"
+        self.building_slot= f"#villageContent > div.buildingSlot.a{slot_number}.aid{slot_number}.{tribe} > a"
+        #villageContent > div.buildingSlot.a31.g10.aid31.roman > a
+    building_button = f'#build > div.upgradeBuilding > div.upgradeButtonsContainer.section2Enabled > div.section1 > button[value*="Unaprijedi"]'
 
 class ResourceFieldSlots:
-    def __init__(self, resource_field_type, resource_field_slot):
-        self.resource_field = f"#resourceFieldContainer > svg.resourceField.resourceField{resource_field_type} > path.buildingSlot{resource_field_slot}"
+    def __init__(self, resource_field_slot):
+        self.resource_field = f"#resourceFieldContainer > a.level.colorLayer.buildingSlot{resource_field_slot}"
     
     resource_field_button = '#build > div.upgradeBuilding > div.upgradeButtonsContainer > div.section1 > button[value*="Unaprijedi"]'
