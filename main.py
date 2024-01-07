@@ -67,7 +67,6 @@ def main():
                     exec(code, globals(), locals())
 
                 new_time = locals().get('refresh_time', None)
-                print("Refresh time is: ", new_time.strftime('%H:%M:%S'))
 
                 print()
                 print("#"*10)
@@ -76,41 +75,15 @@ def main():
                 bot.execute_tasks()
                 
                 print()
-                print("#"*10)
+                print("BOT CLOSED!!!")
+                print("#"*50)
+                print("Refresh time is: ", new_time.strftime('%H:%M:%S'))
                 print()
 
-            time.sleep(60)
+            time.sleep(6)
 
     except KeyboardInterrupt:
         print("Petlja je prekinuta tastaturom.")
-
-
-    ###################################################################
-    ########################      TESTING     #########################
-    ###################################################################
-
-
-    #timers = TimeManager()
-    #bot = TravianBot()
-        
-
-    #timer.delete_timers()
-    #timer.make_start_timers()
-    #timer.get_refresh_timer()
-    #timer.create_starter_tasks()
-    #timer.delete_tasks()
-    #timer.execute_tasks()
-    #timer.make_task()
-
-    #bot.open_login_page()
-    #bot.enter_login_data()
-    #bot.get_villages_data()
-    #bot.wait()
-    #bot.perform_task()
-    #bot.change_village()
-    #bot.wait()
-    #bot.check_construction()
-    #bot.execute_tasks(refresh=4)
 
 
 main()

@@ -15,11 +15,13 @@ class TimeManager:
         self.time = time
 
     #####################################################################
-    #########################    DELETING OLD &   #######################
+    #################    DELETING OLD TIMERS AND TASKS  #################
     ####################    ADDING NEW TIMERS IN DB   ###################
     #####################################################################
      
     def make_start_timers(self):
+
+        ### REMOVING TIMERS AND TASKS DB ###
 
         print("Removing old Times from Timers db!")
         print("-"*30)
@@ -49,7 +51,7 @@ class TimeManager:
             cursor = conn.cursor()
 
             query = "DELETE FROM tasks;"
-            reset_query = f"ALTER TABLE timers AUTO_INCREMENT = 1;"
+            reset_query = f"ALTER TABLE tasks AUTO_INCREMENT = 1;"
             cursor.execute(query)
             cursor.execute(reset_query)
             conn.commit()
@@ -63,6 +65,7 @@ class TimeManager:
             if conn:
                 conn.close()
 
+        ### CREATING NEW TIMERS IN DB ###
                 
         print("Setting new Timers in db!")
         print("-"*30)
@@ -76,7 +79,7 @@ class TimeManager:
             timers_list = []
 
             for _ in range(96):
-                interval = timedelta(minutes=random.randint(10, 20))
+                interval = timedelta(minutes=random.randint(1, 2))
                 new_time = current_time + interval
                 timers_list.append(new_time)
                 current_time = new_time
@@ -150,7 +153,7 @@ class TimeManager:
                 last_timer_id = timers_list[-1][0]
                 last_timer_time = timers_list[-1][1]
                 print(f"Last timer id is: {last_timer_id}, time is: {last_timer_time}")
-                interval = timedelta(minutes=random.randint(10,20))
+                interval = timedelta(minutes=random.randint(1,2))
                 new_time = last_timer_time + interval
                 query_add = f"INSERT INTO timers (time) VALUES ('{new_time}')"
                 cursor.execute(query_add)

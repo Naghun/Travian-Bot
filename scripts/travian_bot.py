@@ -1,7 +1,7 @@
 import selenium
 from seleniumbase import Driver
 import random, time, datetime, requests
-from .constants import Login, Base
+from .constants import Login, Base, ResourceFieldSlots, VillageSlots
 from bs4 import BeautifulSoup
 import mysql.connector
 
@@ -69,44 +69,78 @@ class TravianBot:
 
     def change_village(self, village_number):
 
-        def get_resources_for_current_village():
+        """def get_resources_for_current_village():
             wood = self.driver.find_element(Base.current_wood)
             clay = self.driver.find_element(Base.current_clay)
             iron = self.driver.find_element(Base.current_iron)
             wheat = self.driver.find_element(Base.current_wheat)
 
-            print(f"Wood: {wood.text}, Clay: {clay.text}, Iron: {iron.text}, Wheat: {wheat.text}")
+            print(f"Wood: {wood.text}, Clay: {clay.text}, Iron: {iron.text}, Wheat: {wheat.text}")"""
 
-
-        self.driver.click(Base(village_number).village)
-        get_resources_for_current_village()
+        try:
+            self.driver.click(Base(village_number_statistic=None, village_number=village_number).village)
+            #get_resources_for_current_village()
+        except Exception as e:
+            print("Error opening specified village!", e)
 
     def check_construction(self):
+        free_queue = False
         construction = "#contentOuterContainer > div > div.villageInfoWrapper > div.buildingList > ul > li"
         queue = self.driver.find_elements(construction)
-        if len(queue) == 2:
-            print("Building avalible")
+        if len(queue) != 1 or len(queue) != 2:
+            free_queue = True
+            return free_queue
         else:
-            print("Building under construction")
+            return free_queue
 
 
     #####################################################################
     #####################       GAME FUNCTIONS       ####################
     #####################################################################
+        
+    ########    RESOURCE FIELD UPGRADE      #######
             
-    def upgrade_resource_field(self, variable):
-        print(f"task variable is: {variable}")
+    def upgrade_resource_field(self, village, res_field_slot):
 
-    def upgrade_building(self):
-        #def click_building_slot(driver, slot_number, tribe='egyptian'):
-        selector_template = f"#villageContent > div.buildingSlot.a{slot_number}.aid{slot_number}.{tribe} > svg > path"
-        selector_without_g0 = selector_template.replace('.g0', '').replace(' > svg > path', '')
-
-        # Provjeri postoji li element bez .g0
         try:
-            self.driver.click(selector_without_g0)
+            conn = mysql.connector.connect(**self.db_config)
+            cursor = conn.cursor()
+
+            query = f"SELECT * FROM villages WHERE id = %s;"
+            cursor.execute(query, (village,))
+            village_data = cursor.fetchall()
+            resource_type = village_data[0][3]
+
+        except Exception as e:
+            print(f"Error getting villages data from 'villages' database, {e}")
+
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+
+        try:
+            self.driver.click(ResourceFieldSlots(resource_field_type = resource_type, resource_field_slot=res_field_slot).resource_field)
+        except Exception as e:
+            print("Error getting resoruce field slot to upgrade!!!", e)
+        self.driver.sleep(1)
+        try:
+            self.driver.click(ResourceFieldSlots.resource_field_button)
+        except Exception as e:
+            print("Error finding confirm button for upgrade!!!", e)
+
+
+    ########    BUILDING UPGRADE      #######
+
+    def upgrade_building(self, slot_number, tribe):
+        try:
+            self.driver.click(VillageSlots.building_slot(building_slot = slot_number, tribe = tribe))
         except:
-            self.driver.click(selector_template)
+            print("Error finding specified building slot!")
+
+
+    ########    BUILDING CONSTRUCTION      #######
 
     def construct_new_building(self):
         pass
@@ -156,16 +190,41 @@ class TravianBot:
     def execute_tasks(self):
 
         ### OPENING WINDOW AND TRAVIAN ###
-        print("Setting bot...")
-        self.open_login_page()
-        self.enter_login_data()
-        self.change_village(village_number = 1)
+        try:
+            print("Setting bot...")
+            self.open_login_page()
+            self.enter_login_data()
+            self.change_village(1)
+        except Exception as e:
+            print("Error setting bot and logging in your account!", e)
 
         ### EXECUTING TASKS ###
         print("Starting tasks...")
         print("-"*30)
         tasks = self.timer
-        print("timer id is:", tasks)
+        for task in tasks:
+            task_name = task[1]
+            task_village = task[3]
+            task_tribe = task[4]
+            task_building = task[5]
+            task_resource = task[6]
+            try:
+                self.change_village(task_village)
+            except Exception as e:
+                print("Error with changin village", e)
+
+            if task_name == 'upgrade_resource_field':
+                free = self.check_construction()
+                if free:
+                    self.upgrade_resource_field(village=task_village, res_field_slot=task_resource)
+                else:
+                    print("Building already in construction!")
+        print("#"*50)
+        print("All tasks finished!!!")
+        print("#"*50)
+
+        
+        self.quit()
 
 
 
