@@ -1,7 +1,7 @@
 import selenium
 from seleniumbase import Driver
 import random, time, datetime, requests
-from .constants import Login, Base, ResourceFieldSlots, VillageSlots
+from .constants import Login, Base, ResourceFieldSlots, VillageSlots, FarmsRaidsAttacks
 from bs4 import BeautifulSoup
 import mysql.connector
 
@@ -123,36 +123,89 @@ class TravianBot:
         except Exception as e:
             print("Error changing to village view!", e)
         try:
-            self.driver.click(VillageSlots(slot_number = slot_number, tribe = tribe).building_slot)
+            self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=None, build_type=None).building_slot)
             self.driver.sleep(1)
         except Exception as e:
             print("Error finding specified building slot!", e)
         try:
             self.driver.sleep(1)
-            self.driver.click(VillageSlots(slot_number = slot_number, tribe = tribe).building_button)
+            self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=None, build_type=None).building_button)
         except Exception as e:
             print("Error confirming building!", e)
 
 
     ########    BUILDING CONSTRUCTION      #######
 
-    def construct_new_building(self):
-        pass
+    def construct_new_building(self, slot_number, tribe, new_building_number, build_type):
+
+        try:
+            self.driver.click(Base.village_Page)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error changing to village view!", e)
+        try:
+                self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=new_building_number, build_type=build_type).empty_building)
+                self.driver.sleep(1)
+        except Exception as e:
+            print("Error finding specified empty slot for constructing new building!", e)
+
+        try:
+            if slot_number == 39:
+                self.driver.click(VillageSlots.new_building_button_rallypoint)
+            elif slot_number == 26:
+                self.driver.click(VillageSlots.new_building_button_main_building)
+            else:
+                if build_type == 1:
+                    self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=new_building_number, build_type=build_type).new_building_button)
+                elif build_type == 2:
+                    self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=new_building_number, build_type=build_type).change_build_types)
+                    self.driver.sleep(1)
+                    self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=new_building_number, build_type=build_type).new_building_button)
+                else:
+                    self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=new_building_number, build_type=build_type).change_build_types)
+                    self.driver.sleep(1)
+                    self.driver.click(VillageSlots(slot_number=slot_number, tribe=tribe, new_building_number=new_building_number, build_type=build_type).new_building_button)
+        except Exception as e:
+            print("Error confirming building!", e)
 
     def send_raids():
         pass
 
-    def send_farm_lists():
-        pass
+    def send_farm_lists(self):
+        try:
+            self.driver.click(Base.village_Page)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error while changing to village view!", e)
+        try:
+            self.driver.click(FarmsRaidsAttacks.rallypoint)
+            self.driver.sleep(1)
+            self.driver.click(FarmsRaidsAttacks.farm_list_tab)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error opening rallypoint and finding farms!", e)
+        try:
+            self.driver.click(FarmsRaidsAttacks.start_all_farms)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error while strting farms!", e)
 
-    def do_npc():
-        pass
+    def do_npc(self):
+        remain = self.driver.get_property('#npc > tbody > tr:nth-child(2) > td.sum > span#remain')
+        print(remain)
+        """try:
+            self.driver.click(Base.village_Page)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error while changing to village view!", e)
+        try:
+            self.driver.click(FarmsRaidsAttacks.rallypoint)
+            self.driver.sleep(1)
+            self.driver.click(FarmsRaidsAttacks.farm_list_tab)
+            self.driver.sleep(1)
+        except Exception as e:
+            print("Error opening rallypoint and finding farms!", e)"""
 
-    def train_troops(self):
-        pass
-
-    def upgrade_troops():
-        pass
 
 
     #####################################################################
@@ -203,6 +256,7 @@ class TravianBot:
             task_tribe = task[4]
             task_building = task[5]
             task_resource = task[6]
+            task_building_number = task[7]
             try:
                 self.change_village(task_village)
             except Exception as e:
@@ -218,8 +272,31 @@ class TravianBot:
                 try:
                     self.upgrade_building(slot_number = task_building, tribe=task_tribe)
                 except:
-                    print("Building resource field was not possible!")
-            self.driver.sleep(1)
+                    print("Upgrading building was not possible!")
+                self.driver.sleep(1)
+
+            if task_name == 'construct_building':
+                building_infrastructure = [23, 10, 11, 18, 25, 44, 26, 17, 27, 24, 28, 39, 38, 15, 16, 45, 41, 35, 49, 34]
+                building_army = [42, 19, 27, 22, 13, 20, 21, 46, 14, 29, 30, 36, 48, 47, 31, 32, 33, 43]
+                building_resources = [8, 5, 6, 7, 9]
+
+                if task_building_number in building_infrastructure:
+                    build_type = 1
+                elif task_building_number in building_army:
+                    build_type = 3
+                elif task_building_number in building_resources:
+                    build_type = 5
+                try:
+                    self.construct_new_building(slot_number = task_building, tribe=task_tribe, new_building_number = task_building_number, build_type=build_type)
+                except:
+                    print("Building new building was not possible!")
+                self.driver.sleep(1)
+            
+            if task_name == 'send_farm_lists':
+                try:
+                    self.send_farm_lists()
+                except:
+                    print("Building new building was not possible!")
 
         print("#"*50)
         print("All tasks finished!!!")

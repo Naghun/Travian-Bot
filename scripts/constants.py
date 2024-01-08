@@ -33,14 +33,29 @@ class Base:
 
 
 class VillageSlots:
-    def __init__(self, slot_number, tribe = None):
+    def __init__(self, slot_number, tribe = None, new_building_number = None, build_type = 1):
         self.empty_building = f"#villageContent > div.buildingSlot.a{slot_number}.g0.aid{slot_number}.{tribe} > svg > path"
         self.building_slot= f"#villageContent > div.buildingSlot.a{slot_number}.aid{slot_number}.{tribe} > a"
-        #villageContent > div.buildingSlot.a31.g10.aid31.roman > a
+        self.new_building_button = f'#contract_building{new_building_number} > div.contractLink > button[value = "Izgraditi građevinu"]'
+        self.change_build_types = f'#build > div.contentNavi.subNavi > div > div:nth-child({build_type}) > a'
+    new_building_button_rallypoint = f'#contract_building16 > div.contractLink > button[value = "Izgraditi građevinu"]'
+    new_building_button_main_building = f'#contract_building15 > div.contractLink > button[value = "Izgraditi građevinu"]'
     building_button = f'#build > div.upgradeBuilding > div.upgradeButtonsContainer.section2Enabled > div.section1 > button[value*="Unaprijedi"]'
+
 
 class ResourceFieldSlots:
     def __init__(self, resource_field_slot):
         self.resource_field = f"#resourceFieldContainer > a.level.colorLayer.buildingSlot{resource_field_slot}"
     
     resource_field_button = '#build > div.upgradeBuilding > div.upgradeButtonsContainer > div.section1 > button[value*="Unaprijedi"]'
+
+class FarmsRaidsAttacks:
+    rallypoint = f'#villageContent > div.buildingSlot.a39.g16.aid39 > a'
+    send_troops_tab = f'#content > div.contentNavi.subNavi > div > div.content.favor.favorKey2 > a'
+    farm_list_tab = f'#content > div.contentNavi.subNavi > div > div.content.favor.favorKey99 > a'
+    start_all_farms = f'#stickyWrapper > button.textButtonV2.buttonFramed.startAllFarmLists.rectangle.withText.green > div'
+    #stickyWrapper > button.textButtonV2.buttonFramed.startAllFarmLists.rectangle.withText.green
+
+class Market:
+    market = f'#villageContent > div.buildingSlot.a32.g17.aid32 > a'
+    npc_button = f'#build > div.npcMerchant > button'
