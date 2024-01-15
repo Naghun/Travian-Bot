@@ -59,8 +59,7 @@ class TaskCreator:
 
         print("Timer for tasks retrieved successfully!!!")
 
-        names =  ['upgrade_resource_field', 'upgrade_building', 'construct_building', 'send_farm_lists', 'do_npc', 'raid_oasis', 'train_troops']
-
+        names =  ['upgrade_resource_field', 'upgrade_building', 'construct_building', 'send_farm_lists', 'raid_oasis', 'do_npc', 'send_farm1', 'send_farm2', 'send_farm3', 'send_farm4', 'send_hero']
         villages = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]  
         tribes = ['none', 'egyptian', 'roman', 'spartan', 'hun', 'gaul', 'teuton']
         building_slots = [0,26,30,32,35,39,31,29,34,37,38,36,33,25,23,22,21,20,19,24,28,27,40,41,42,43] # fali luka
@@ -113,19 +112,32 @@ class TaskCreator:
             if conn:
                 conn.close()
 
-    def create_task2(self):
+    def create_npc(self, wood, clay, iron, wheat, npc_type):
+
+        if npc_type == 1:
+            wood = 0
+            clay = 0
+            iron = 0
+            wheat = 0
+
+        task_data = {
+            'npc_type':npc_type,
+            'wood':wood,
+            'clay':clay,
+            'iron':iron,
+            'wheat':wheat,
+        }
         try:
             conn = mysql.connector.connect(**self.db_config)
             cursor = conn.cursor()
 
-            query = f"SELECT * FROM timers WHERE ID = {id};"
-            cursor.execute(query)
-            timers = cursor.fetchall()
-            print("time for task is: ", timers[0][1])
-            print("id for task is: ", timers[0][0])
+            query = f"INSERT INTO npc (wood, clay, iron, wheat, npc_type) VALUES (%s, %s, %s, %s, %s)"
+            values = (task_data['wood'], task_data['clay'], task_data['iron'], task_data['wheat'], task_data['npc_type'])
+            cursor.execute(query, values)
+            conn.commit()
 
         except Exception as e:
-            print(f"Error getting specified time from 'timers' database, {e}")
+            print(f"Error setting data in 'npc' database, {e}")
 
         finally:
             if cursor:
@@ -133,18 +145,19 @@ class TaskCreator:
             if conn:
                 conn.close()
 
-        print("Timer for tasks retrieved successfully!!!")
+        print("Data for npc is set!!!")
 
 
 
 if __name__ == '__main__':
     task = TaskCreator()
-    task.create_task(id=1, task_name_index=5, village_index=1, tribe_index=0,
+    task.create_task(id=99, task_name_index=8, village_index=1, tribe_index=1,
                       building_slot_index=None, resource_field_slot_index=None, contract_building_numbers_index = None)
-    #task.show_timers(5)
+    #task.show_timers(40)
+    #task.create_npc(wood = 100000, clay = 100000, iron = 100000, wheat = 0, npc_type = 2)
 """
-    names =  ['upgrade_resource_field', 'upgrade_building', 'construct_building', 'send_farm_lists', 'raid_oasis', 'do_npc',]
-    #               0                           1                   2                   3                  4           5
+    names =  ['upgrade_resource_field', 'upgrade_building', 'construct_building', 'send_farm_lists', 'raid_oasis', 'do_npc', 'send_farm1', 'send_farm2', 'send_farm3', 'send_farm4', send_hero]
+    #               0                           1                   2                   3                  4           5            6           7           8               9           10
 
     villages = [,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]    # -1 for indexes
 
@@ -153,7 +166,7 @@ if __name__ == '__main__':
 
     #                   0       1          2       3           4           5           6           7           8         9         10          11           12      13
     building_slots = ['none',  main', 'trade', 'market', 'residence', 'rallypoint', 'warehouse', 'silos', 'stable', 'barracks', 'hospital', 'town hall', 'hero', 'bakery', 
-                        'mill', 'res1', 'res2', 'res3', 'workshop', 'arena', 'academy', 'smithy', 'wall', 'waterwork', 'treasury', 'great', 'harbor']
+                        'mill', 'res1', 'res2', 'res3', 'arena', 'workshop', 'academy', 'smithy', 'wall', 'waterwork', 'treasury', 'great', 'harbor']
     #                    14      15      16        17      18          19      20          21       22          23          24       25         26
 
     resource_field_slots = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]       # -1 for indexes

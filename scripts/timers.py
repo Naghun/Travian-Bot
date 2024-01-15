@@ -65,6 +65,27 @@ class TimeManager:
             if conn:
                 conn.close()
 
+        print("Removing odl from npc db!")
+        print("-"*30)
+        try:
+            conn = mysql.connector.connect(**self.db_config)
+            cursor = conn.cursor()
+
+            query = "DELETE FROM npc;"
+            reset_query = f"ALTER TABLE npc AUTO_INCREMENT = 1;"
+            cursor.execute(query)
+            cursor.execute(reset_query)
+            conn.commit()
+
+        except Exception as e:
+            print(f"Error deleting rows from 'npc' table: {e}")
+        
+        finally:
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
+
         ### CREATING NEW TIMERS IN DB ###
                 
         print("Setting new Timers in db!")
@@ -79,7 +100,7 @@ class TimeManager:
             timers_list = []
 
             for _ in range(96):
-                interval = timedelta(minutes=random.randint(1, 2))
+                interval = timedelta(minutes=random.randint(16, 20))
                 new_time = current_time + interval
                 timers_list.append(new_time)
                 current_time = new_time
@@ -153,7 +174,7 @@ class TimeManager:
                 last_timer_id = timers_list[-1][0]
                 last_timer_time = timers_list[-1][1]
                 print(f"Last timer id is: {last_timer_id}, time is: {last_timer_time}")
-                interval = timedelta(minutes=random.randint(1,2))
+                interval = timedelta(minutes=random.randint(16,20))
                 new_time = last_timer_time + interval
                 query_add = f"INSERT INTO timers (time) VALUES ('{new_time}')"
                 cursor.execute(query_add)

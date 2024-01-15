@@ -34,8 +34,6 @@ def main():
     print("-"*20, " Program starts! ", "-"*20)
     print("#"*60)
 
-    ref = None
-
     with open('scripts/refresh.py', 'r') as file:
         code = compile(file.read(), 'refresh.py', 'exec')
         exec(code, globals(), locals())
@@ -83,7 +81,7 @@ def main():
             time.sleep(6)
 
     except KeyboardInterrupt:
-        print("Program je prekinut.")
+        print("Program terminated.")
 
 
 main()

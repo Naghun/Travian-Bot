@@ -1,7 +1,7 @@
 
 
 class Login:
-    login_page_link = "https://sow.x1.arabics.travian.com/"
+    login_page_link = "https://nys.x1.arabics.travian.com/"
 
     login_name = "Naghun"
     login_password = "sifraboliglava97"
@@ -38,9 +38,9 @@ class VillageSlots:
         self.building_slot= f"#villageContent > div.buildingSlot.a{slot_number}.aid{slot_number}.{tribe} > a"
         self.new_building_button = f'#contract_building{new_building_number} > div.contractLink > button[value = "Izgraditi građevinu"]'
         self.change_build_types = f'#build > div.contentNavi.subNavi > div > div:nth-child({build_type}) > a'
-    new_building_button_rallypoint = f'#contract_building16 > div.contractLink > button[value = "Izgraditi građevinu"]'
-    new_building_button_main_building = f'#contract_building15 > div.contractLink > button[value = "Izgraditi građevinu"]'
-    building_button = f'#build > div.upgradeBuilding > div.upgradeButtonsContainer.section2Enabled > div.section1 > button[value*="Unaprijedi"]'
+    new_building_button_rallypoint = '#contract_building16 > div.contractLink > button[value = "Izgraditi građevinu"]'
+    new_building_button_main_building = '#contract_building15 > div.contractLink > button[value = "Izgraditi građevinu"]'
+    building_button = '#build > div.upgradeBuilding > div.upgradeButtonsContainer > div.section1 > button[value*="Unaprijedi"]'
 
 
 class ResourceFieldSlots:
@@ -50,12 +50,36 @@ class ResourceFieldSlots:
     resource_field_button = '#build > div.upgradeBuilding > div.upgradeButtonsContainer > div.section1 > button[value*="Unaprijedi"]'
 
 class FarmsRaidsAttacks:
-    rallypoint = f'#villageContent > div.buildingSlot.a39.g16.aid39 > a'
-    send_troops_tab = f'#content > div.contentNavi.subNavi > div > div.content.favor.favorKey2 > a'
-    farm_list_tab = f'#content > div.contentNavi.subNavi > div > div.content.favor.favorKey99 > a'
-    start_all_farms = f'#stickyWrapper > button.textButtonV2.buttonFramed.startAllFarmLists.rectangle.withText.green > div'
-    #stickyWrapper > button.textButtonV2.buttonFramed.startAllFarmLists.rectangle.withText.green
+    rallypoint = '#villageContent > div.buildingSlot.a39.g16.aid39 > a'
+    send_troops_tab = '#content > div.contentNavi.subNavi > div > div.content.favor.favorKey2 > a'
+    farm_list_tab = '#content > div.contentNavi.subNavi > div > div.content.favor.favorKey99 > a'
+    start_all_farms = '#stickyWrapper > button.textButtonV2.buttonFramed.startAllFarmLists.rectangle.withText.green > div'
+    quick_link = "#sidebarBoxLinklist > div.content > ul > li > a"
+    farm_list1 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(2) > div > div.farmListHeader > button'
+    farm_list2 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(3) > div > div.farmListHeader > button'
+    farm_list3 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(4) > div > div.farmListHeader > button'
+    farm_list4 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(5) > div > div.farmListHeader > button'
+
+
 
 class Market:
-    market = f'#villageContent > div.buildingSlot.a32.g17.aid32 > a'
-    npc_button = f'#build > div.npcMerchant > button'
+    market = '#villageContent > div.buildingSlot.a32.g17.aid32 > a'
+    npc_button = '#build > div.npcMerchant > button'
+    wood_input = '#npc > tbody > tr:nth-child(1) > td:nth-child(1) > input'
+    clay_input = '#npc > tbody > tr:nth-child(1) > td:nth-child(2) > input'
+    iron_input = '#npc > tbody > tr:nth-child(1) > td:nth-child(3) > input'
+    wheat_input = '#npc > tbody > tr:nth-child(1) > td:nth-child(4) > input'
+    npc_button_allocate = '#submitText > button'
+    npc_button_confirm = '#submitButton > button'
+
+class Map:
+    x_coordinates = '#xCoordInput'
+    y_coordinates = '#yCoordInput'
+    raid_checkbox = '#build > div > form > div.option > label:nth-child(5) > input'
+    hero_input = '#troops > tbody > tr:nth-child(3) > td.line-last.column-last.small > input'
+    hero_input_click = "#troops > tbody > tr:nth-child(3) > td.line-last.column-last.small > a"
+    send_troops_link = "#sidebarBoxLinklist > div.content > ul > li:nth-child(2) > a"
+    oasis_decider = '#troop_info > tbody > tr:nth-child(1) > td'
+    send_raid = '#tileDetails > div.detailImage > div:nth-child(1) > div:nth-child(2) > a'
+    confirm_sending_hero1 = "#ok"
+    confirm_sending_hero2 = '#rallyPointButtonsContainer > button[value="Potvrdi"]'
