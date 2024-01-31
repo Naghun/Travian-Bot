@@ -11,6 +11,12 @@ class Login:
 
     login_button_submit = "#loginForm > tbody > tr.loginButtonRow > td > button"
 
+    email_field = '#identifierId'
+    email= 'abdullah.sin97'
+    pass_field= '#password > div.aCsJod.oJeWuf > div > div.Xb9hP > input'
+    password= 'Sifraboliglava97'
+    submit = '#passwordNext > div > button > span'
+
 class Base:
     def __init__(self, village_number_statistic=1, village_number=1):
         self.village_statistic_table_rows = f"#overview > tbody > tr:nth-child({village_number_statistic}) > td"
@@ -19,6 +25,8 @@ class Base:
     village_Page = "#navigation > a.village.buildingView"
     map_page = "#navigation > a.map"
     statistic_page = "#navigation > a.statistics"
+
+
 
 
     current_wood = "#l1"
@@ -56,7 +64,7 @@ class FarmsRaidsAttacks:
     start_all_farms = '#stickyWrapper > button.textButtonV2.buttonFramed.startAllFarmLists.rectangle.withText.green > div'
     quick_link = "#sidebarBoxLinklist > div.content > ul > li > a"
     farm_list1 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(2) > div > div.farmListHeader > button'
-    farm_list2 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(3) > div > div.farmListHeader > button'
+    farm_list2 = '#rallyPointFarmList > div:nth-child(2) > div.dropContainer > div > div.farmListHeader > button'
     farm_list3 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(4) > div > div.farmListHeader > button'
     farm_list4 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(5) > div > div.farmListHeader > button'
 
@@ -83,3 +91,5 @@ class Map:
     send_raid = '#tileDetails > div.detailImage > div:nth-child(1) > div:nth-child(2) > a'
     confirm_sending_hero1 = "#ok"
     confirm_sending_hero2 = '#rallyPointButtonsContainer > button[value="Potvrdi"]'
+
+    #rallyPointFarmList > div:nth-child(1) > div:nth-child(3) > div > div.farmListHeader > button

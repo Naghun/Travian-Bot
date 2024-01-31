@@ -41,8 +41,13 @@ def main():
     ref_time = locals().get('refresh_time', None)
     ref_id = locals().get('refresh_id', None)
     print("Refresh time is: ", ref_time.strftime('%H:%M:%S'))
+    print("ID is: ", ref_id)
 
     try:
+        bot = TravianBot()
+        bot.login_to_gmail()
+        bot.open_login_page()
+        bot.enter_login_data()
         while True:
             current_time = datetime.datetime.now()
             with open('scripts/refresh.py', 'r') as file:
@@ -52,7 +57,6 @@ def main():
             ref_time = locals().get('refresh_time', None)
             ref_id = locals().get('refresh_id', None)
             if ref_time <= current_time:
-                bot = TravianBot()
                 print("#"*50)
                 print("Refresh time reached!!!")
                 print("#"*50)
@@ -65,6 +69,7 @@ def main():
                     exec(code, globals(), locals())
 
                 new_time = locals().get('refresh_time', None)
+                new_time_id = locals().get('refresh_id', None)
 
                 print()
                 print("#"*10)
@@ -76,6 +81,7 @@ def main():
                 print("BOT CLOSED!!!")
                 print("#"*50)
                 print("Refresh time is: ", new_time.strftime('%H:%M:%S'))
+                print("ID is: ", new_time_id)
                 print()
 
             time.sleep(6)

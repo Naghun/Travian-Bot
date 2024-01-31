@@ -99,8 +99,8 @@ class TimeManager:
             current_time = datetime.now()
             timers_list = []
 
-            for _ in range(96):
-                interval = timedelta(minutes=random.randint(16, 20))
+            for _ in range(140):
+                interval = timedelta(minutes=random.randint(8, 12))
                 new_time = current_time + interval
                 timers_list.append(new_time)
                 current_time = new_time
@@ -174,7 +174,7 @@ class TimeManager:
                 last_timer_id = timers_list[-1][0]
                 last_timer_time = timers_list[-1][1]
                 print(f"Last timer id is: {last_timer_id}, time is: {last_timer_time}")
-                interval = timedelta(minutes=random.randint(16,20))
+                interval = timedelta(minutes=random.randint(8,12))
                 new_time = last_timer_time + interval
                 query_add = f"INSERT INTO timers (time) VALUES ('{new_time}')"
                 cursor.execute(query_add)

@@ -38,6 +38,7 @@ class TaskCreator:
 
     def create_task(self, id=1, task_name_index=1, village_index=1, tribe_index=1, building_slot_index=1, resource_field_slot_index = 1, 
                     contract_building_numbers_index = 1):
+        
         try:
             conn = mysql.connector.connect(**self.db_config)
             cursor = conn.cursor()
@@ -150,14 +151,25 @@ class TaskCreator:
 
 
 if __name__ == '__main__':
+
     task = TaskCreator()
-    task.create_task(id=99, task_name_index=8, village_index=1, tribe_index=1,
-                      building_slot_index=None, resource_field_slot_index=None, contract_building_numbers_index = None)
-    #task.show_timers(40)
+    for index in range(120):
+        if (index) % 4 == 0:
+            task.create_task(id=index+1, task_name_index=6, village_index=1, tribe_index=2,
+                            building_slot_index=None, resource_field_slot_index=None, contract_building_numbers_index = None)
+            
+        task.create_task(id=index+1, task_name_index=7, village_index=1, tribe_index=2,
+                        building_slot_index=None, resource_field_slot_index=None, contract_building_numbers_index = None)
+    
+    #task.create_task(id=73, task_name_index=0, village_index=5, tribe_index=2,
+                        #building_slot_index=None, resource_field_slot_index=18, contract_building_numbers_index = None)
+    
+    #task.show_timers(50)
     #task.create_npc(wood = 100000, clay = 100000, iron = 100000, wheat = 0, npc_type = 2)
 """
     names =  ['upgrade_resource_field', 'upgrade_building', 'construct_building', 'send_farm_lists', 'raid_oasis', 'do_npc', 'send_farm1', 'send_farm2', 'send_farm3', 'send_farm4', send_hero]
-    #               0                           1                   2                   3                  4           5            6           7           8               9           10
+
+        #               0                           1                   2                   3                  4           5            6           7           8               9           10
 
     villages = [,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]    # -1 for indexes
 

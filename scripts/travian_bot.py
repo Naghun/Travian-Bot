@@ -28,6 +28,19 @@ class TravianBot:
     #########################       LOGIN       #########################
     #####################################################################
 
+    def login_to_gmail(self):
+        self.driver.get('https://google.com')
+        self.driver.sleep(1)
+        self.driver.click('#gb > div > div.gb_Ud > a')
+        self.driver.sleep(1)
+        self.driver.send_keys(Login.email_field, Login.email)
+        self.driver.sleep(1)
+        self.driver.click('#identifierNext > div > button > span')
+        self.driver.sleep(1)
+        self.driver.send_keys(Login.pass_field, Login.password)
+        self.driver.sleep(1)
+        self.driver.click(Login.submit)
+        self.driver.sleep(1)
 
     def open_login_page(self):
         print("Opening login page!!!")
@@ -71,15 +84,6 @@ class TravianBot:
             
 
     def change_village(self, village_number):
-
-        """def get_resources_for_current_village():
-            wood = self.driver.find_element(Base.current_wood)
-            clay = self.driver.find_element(Base.current_clay)
-            iron = self.driver.find_element(Base.current_iron)
-            wheat = self.driver.find_element(Base.current_wheat)
-
-            print(f"Wood: {wood.text}, Clay: {clay.text}, Iron: {iron.text}, Wheat: {wheat.text}")"""
-
         try:
             self.driver.click(Base(village_number_statistic=None, village_number=village_number).village)
             #get_resources_for_current_village()
@@ -106,12 +110,14 @@ class TravianBot:
     def upgrade_resource_field(self, res_field_slot):
 
         try:
+            self.driver.sleep(1)
             self.driver.click(ResourceFieldSlots(resource_field_slot=res_field_slot).resource_field)
+            self.driver.sleep(1)
         except Exception as e:
             print("Error getting resoruce field slot to upgrade!!!", e)
-        self.driver.sleep(1)
         try:
             self.driver.click(ResourceFieldSlots.resource_field_button)
+            self.driver.sleep(1)
         except Exception as e:
             print("Error finding confirm button for upgrade!!!", e)
 
@@ -415,27 +421,6 @@ class TravianBot:
 
     def execute_tasks(self):
 
-        ### OPENING WINDOW AND TRAVIAN ###
-
-        retry_count = 0
-        max_retries = 2
-
-        while retry_count < max_retries:
-            try:
-                print("Setting bot...")
-                self.open_login_page()
-                self.enter_login_data()
-                self.change_village(1)
-                break
-            except Exception as e:
-                print(f"Error setting bot and logging in your account! Attempt {retry_count + 1}/{max_retries}", e)
-                self.quit()
-                retry_count += 1
-
-            if retry_count == max_retries:
-                print(f"Max retries of ({max_retries}) reached. Unable to set up the bot.")
-
-        ### EXECUTING TASKS ###
         print("Starting tasks...")
         print("-"*30)
         self.driver.sleep(2)
@@ -553,9 +538,6 @@ class TravianBot:
         print("#"*50)
         print("All tasks finished!!!")
         print("#"*50)
-
-        
-        self.quit()
 
 
 
