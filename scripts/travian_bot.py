@@ -29,18 +29,18 @@ class TravianBot:
     #####################################################################
 
     def login_to_gmail(self):
-        self.driver.get('https://google.com')
-        self.driver.sleep(1)
-        self.driver.click('#gb > div > div.gb_Ud > a')
-        self.driver.sleep(1)
+        self.driver.get(Login.google_page)
+        self.driver.sleep(2)
+        self.driver.click(Login.sign_in_google)
+        self.driver.sleep(2)
         self.driver.send_keys(Login.email_field, Login.email)
         self.driver.sleep(1)
-        self.driver.click('#identifierNext > div > button > span')
-        self.driver.sleep(1)
+        self.driver.click(Login.confirm_google_email)
+        self.driver.sleep(3)
         self.driver.send_keys(Login.pass_field, Login.password)
         self.driver.sleep(1)
         self.driver.click(Login.submit)
-        self.driver.sleep(1)
+        self.driver.sleep(2)
 
     def open_login_page(self):
         print("Opening login page!!!")

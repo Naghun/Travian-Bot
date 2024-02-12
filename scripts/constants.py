@@ -17,6 +17,10 @@ class Login:
     password= 'Sifraboliglava97'
     submit = '#passwordNext > div > button > span'
 
+    google_page = 'https://google.com'
+    sign_in_google = '#gb > div > div.gb_Ud > a'
+    confirm_google_email = '#identifierNext > div > button > span'
+
 class Base:
     def __init__(self, village_number_statistic=1, village_number=1):
         self.village_statistic_table_rows = f"#overview > tbody > tr:nth-child({village_number_statistic}) > td"
@@ -62,8 +66,8 @@ class FarmsRaidsAttacks:
     send_troops_tab = '#content > div.contentNavi.subNavi > div > div.content.favor.favorKey2 > a'
     farm_list_tab = '#content > div.contentNavi.subNavi > div > div.content.favor.favorKey99 > a'
     start_all_farms = '#stickyWrapper > button.textButtonV2.buttonFramed.startAllFarmLists.rectangle.withText.green > div'
-    quick_link = "#sidebarBoxLinklist > div.content > ul > li > a"
-    farm_list1 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(2) > div > div.farmListHeader > button'
+    quick_link = '#sidebarBoxLinklist > div.content > ul > li:nth-child(1) > a'
+    farm_list1 = '#rallyPointFarmList > div:nth-child(1) > div.dropContainer > div > div.farmListHeader > button'
     farm_list2 = '#rallyPointFarmList > div:nth-child(2) > div.dropContainer > div > div.farmListHeader > button'
     farm_list3 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(4) > div > div.farmListHeader > button'
     farm_list4 = '#rallyPointFarmList > div.villageWrapper > div:nth-child(5) > div > div.farmListHeader > button'

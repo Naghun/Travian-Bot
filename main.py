@@ -84,7 +84,7 @@ def main():
                 print("ID is: ", new_time_id)
                 print()
 
-            time.sleep(6)
+            time.sleep(60)
 
     except KeyboardInterrupt:
         print("Program terminated.")
