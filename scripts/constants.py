@@ -1,7 +1,7 @@
 
 
 class Login:
-    login_page_link = "https://nys.x1.arabics.travian.com/"
+    login_page_link = "https://ts50.x5.europe.travian.com/"
 
     login_name = "Naghun"
     login_password = "sifraboliglava97"

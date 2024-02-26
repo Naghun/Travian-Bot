@@ -153,7 +153,9 @@ class TaskCreator:
 if __name__ == '__main__':
 
     task = TaskCreator()
-    for index in range(90):     
+    for index in range(120):     
+        #task.create_task(id=index+1, task_name_index=7, village_index=2, tribe_index=1,
+                        #building_slot_index=None, resource_field_slot_index=None, contract_building_numbers_index = None)
         task.create_task(id=index+1, task_name_index=6, village_index=2, tribe_index=1,
                         building_slot_index=None, resource_field_slot_index=None, contract_building_numbers_index = None)
     
